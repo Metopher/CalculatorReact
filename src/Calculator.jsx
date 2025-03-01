@@ -3,19 +3,25 @@ import React, { useState } from 'react';
 import './Calculator.css'; // Optional: for styling
 
 const Calculator = () => {
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState('0');
 
     const handleButtonClick = (value) => {
-        setInput((prev) => prev + value);
+        if (input === '0') {
+            setInput(value);
+        } else {
+            setInput((prev) => prev + value);
+        }
     };
 
     const handleClear = () => {
-        setInput('');
+        setInput('0');
     };
 
     const handleCalculate = () => {
         try {
-            setInput(eval(input).toString());
+            // Use Function constructor instead of eval for better security
+            const result = Function(`'use strict'; return (${input})`)();
+            setInput(result.toString());
         } catch (error) {
             setInput('Error');
         }
@@ -48,3 +54,4 @@ const Calculator = () => {
 };
 
 export default Calculator;
+
